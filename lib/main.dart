@@ -25,19 +25,15 @@ class _MyAppState extends State<MyApp> {
     var mqSize = MediaQuery.of(context).size;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 20,
-            backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-          ),
-          backgroundColor: Colors.black,
-          body: Center(child: OrientationBuilder(
+      home: 
+          
+           Center(child: OrientationBuilder(
             builder: (context, orientation) {
               return orientation == Orientation.portrait
                   ? const PortraitCalculator()
                   : const LandscapeCalculator();
             },
-          ))),
+          ))
     );
   }
 }
