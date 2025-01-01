@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void myDialogBox({required var context}) {
+void noHistoryDialogBox({required var context}) {
   showCupertinoDialog(
-      barrierDismissible: true,
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -12,37 +11,40 @@ void myDialogBox({required var context}) {
           title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.warning,
-                color: Colors.red,
-                size: 50,
-              ),
               Text(
-                'Wait',
+                'History',
                 style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 20,
+                  fontStyle: FontStyle.italic,
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontSize: 35,
                     fontWeight: FontWeight.bold),
               )
             ],
           ),
-          content: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                'This feature will be add later!',
-                style: TextStyle(color: Colors.red),
+              Icon(
+                Icons.note,
+                color: Colors.white,
               ),
+              Text(
+                'No history found',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              )
             ],
           ),
           actions: [
-            ElevatedButton(
-                style: const ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Colors.white)),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Ok', style: TextStyle(color: Colors.black)))
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Ok'))
+              ],
+            )
           ],
         );
       });

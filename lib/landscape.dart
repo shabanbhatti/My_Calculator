@@ -11,6 +11,8 @@ class LandscapeCalculator extends StatefulWidget {
 }
 
 class _LandscapeCalculatorState extends State<LandscapeCalculator> {
+// -----------------------------Show dialog box
+
   var scrollController = ScrollController();
   int myTextLenght = 20;
   String myText = '';
@@ -23,9 +25,69 @@ class _LandscapeCalculatorState extends State<LandscapeCalculator> {
   var isTrue = true;
 
   String elseString = '';
+  List<String> myList = <String>[];
 
   @override
   Widget build(BuildContext context) {
+    //-----------------Show Dialog Box
+
+    void myDialogBox({required var context}) {
+      setState(() {
+        showCupertinoDialog(
+            barrierDismissible: true,
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                scrollable: true,
+                alignment: Alignment.center,
+                backgroundColor: const Color.fromARGB(255, 62, 62, 62),
+                title: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'History',
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+                content: Container(
+                  height: 200,
+                  width: 200,
+                  child: ListView(
+                    children: myList.map((item) {
+                      return ListTile(
+                          title: Text(
+                        item.toString(),
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ));
+                    }).toList(),
+                  ),
+                ),
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              myList.clear();
+                            });
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Clear history'))
+                    ],
+                  )
+                ],
+              );
+            });
+      });
+    }
+
+    // -------------------------------_END----------------------------
     var mqSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -51,7 +113,7 @@ class _LandscapeCalculatorState extends State<LandscapeCalculator> {
                           child: Text(
                             answer,
                             style: const TextStyle(
-                                fontSize: 40,
+                                fontSize: 20,
                                 color: Color.fromARGB(255, 152, 152, 152)),
                           ),
                         ),
@@ -90,658 +152,801 @@ class _LandscapeCalculatorState extends State<LandscapeCalculator> {
             height: mqSize.height * 0.07,
           ),
           // --------------------------------------------------------------------------
-          SizedBox(
-            height: mqSize.height * 0.54,
-            width: mqSize.width * 0.95,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                    height: mqSize.height * 0.1,
-                    width: mqSize.width * 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: WidgetStatePropertyAll(
-                                  Colors.white.withOpacity(0.4),
-                                ),
-                                shape: WidgetStatePropertyAll(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50)),
-                                ),
-                                splashFactory: InkRipple.splashFactory,
-                                overlayColor: WidgetStatePropertyAll(
-                                  Colors.white.withOpacity(0.1),
-                                )),
-                            onLongPress: () {
-                              setState(() {
-                                myText2 = '';
-                                myText = '';
-                                isTrue = true;
-                              });
-                            },
-                            onPressed: () {
-                              setState(() {
-                                if (isTrue == false) {
-                                  isTrue = true;
-                                  myText2 = '';
-                                  myText = '';
-                                }
+          Center(
+            child: SizedBox(
+              height: mqSize.height * 0.54,
+              width: mqSize.width * 0.95,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Flexible(
+                    child: SizedBox(
+                        height: mqSize.height * 0.1,
+                        width: mqSize.width * 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor: WidgetStatePropertyAll(
+                                        Colors.white.withOpacity(0.4),
+                                      ),
+                                      shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                      ),
+                                      splashFactory: InkRipple.splashFactory,
+                                      overlayColor: WidgetStatePropertyAll(
+                                        Colors.white.withOpacity(0.1),
+                                      )),
+                                  onLongPress: () {
+                                    setState(() {
+                                      myText2 = '';
+                                      myText = '';
+                                      isTrue = true;
+                                    });
+                                  },
+                                  onPressed: () {
+                                    setState(() {
+                                      if (isTrue == false) {
+                                        isTrue = true;
+                                        myText2 = '';
+                                        myText = '';
+                                      }
 
-                                if (myText.isNotEmpty) {
-                                  myText2 =
-                                      myText2.substring(0, myText2.length - 1);
-                                  myText =
-                                      myText.substring(0, myText.length - 1);
-                                  answer.isEmpty;
-                                } else {
-                                  myText2 = '';
-                                  myText = '';
-                                  answer.isEmpty;
-                                }
-                              });
-                            },
-                            child: FittedBox(
-                              child: (isTrue == true && myText.isNotEmpty)
-                                  ? const Icon(Icons.backspace,
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                      size: 30)
-                                  : const Text(
-                                      'AC',
+                                      if (myText.isNotEmpty) {
+                                        myText2 = myText2.substring(
+                                            0, myText2.length - 1);
+                                        myText = myText.substring(
+                                            0, myText.length - 1);
+                                        answer.isEmpty;
+                                      } else {
+                                        myText2 = '';
+                                        myText = '';
+                                        answer.isEmpty;
+                                      }
+                                    });
+                                  },
+                                  child: Flexible(
+                                    child: FittedBox(
+                                      child: (isTrue == true &&
+                                              myText.isNotEmpty)
+                                          ? const Icon(Icons.backspace,
+                                              color: Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              size: 30)
+                                          : const Text(
+                                              'AC',
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50)),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.4),
+                                  splashColor: Colors.white.withOpacity(0.5),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (isTrue == false) {
+                                        isTrue = true;
+                                      }
+                                      myText += '(';
+                                      myText2 += '(';
+                                    });
+                                  },
+                                  child: Flexible(
+                                    child: const FittedBox(
+                                        child: Text(
+                                      '(',
                                       style: TextStyle(
                                           color: Color.fromARGB(
                                               255, 255, 255, 255),
                                           fontSize: 30,
                                           fontWeight: FontWeight.bold),
-                                    ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            backgroundColor: Colors.white.withOpacity(0.4),
-                            splashColor: Colors.white.withOpacity(0.5),
-                            onPressed: () {
-                              setState(() {
-                                if (isTrue == false) {
-                                  isTrue = true;
-                                }
-                                myText += '(';
-                                myText2 += '(';
-                              });
-                            },
-                            child: const FittedBox(
-                                child: Text(
-                              '(',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                          ),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                              splashColor: Colors.white.withOpacity(0.5),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              backgroundColor: Colors.white.withOpacity(0.4),
-                              onPressed: () {
-                                setState(() {
-                                  if (isTrue == false) {
-                                    isTrue = true;
-                                  }
-
-                                  if (myText.isNotEmpty) {
-                                    myText += ')';
-                                    myText2 += ')';
-                                  }
-                                });
-                              },
-                              child: const FittedBox(
-                                  child: Text(
-                                ')',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold),
-                              ))),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              splashColor: Colors.white.withOpacity(0.5),
-                              backgroundColor: Colors.orange,
-                              onPressed: () {
-                                setState(() {
-                                  if (isTrue == false) {
-                                    isTrue = true;
-                                  }
-                                  if (myText.isNotEmpty) {
-                                    myText += '/';
-                                    myText2 += '÷';
-                                  }
-                                });
-                              },
-                              child: const FittedBox(
-                                  child: Text(
-                                '÷',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 40,
+                                    )),
+                                  ),
                                 ),
-                              ))),
-                        ),
-                      ],
-                    )),
-
-                // --------------------------------------------------------------------------
-                // --------------------------------------------------------------------------
-                // --------------------------------------------------------------------------
-
-                // --------------------------------------------------------------------------
-                SizedBox(
-                    height: mqSize.height * 0.1,
-                    width: mqSize.width * 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                            splashColor: Colors.white.withOpacity(0.5),
-                            backgroundColor: Colors.white.withOpacity(0.12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            onPressed: () {
-                              setState(() {
-                                if (isTrue == false) {
-                                  isTrue = true;
-                                  myText = '';
-                                  myText2 = '';
-                                }
-                                answer = '';
-                                myText2 = "${myText2}7";
-                                myText = "${myText}7";
-                              });
-                            },
-                            child: const FittedBox(
-                                child: Text(
-                              '7',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 30),
-                            )),
-                          ),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                            splashColor: Colors.white.withOpacity(0.5),
-                            backgroundColor: Colors.white.withOpacity(0.12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            onPressed: () {
-                              setState(() {
-                                if (isTrue == false) {
-                                  isTrue = true;
-                                  myText = '';
-                                  myText2 = '';
-                                }
-                                answer = '';
-                                myText = "${myText}8";
-                                myText2 = "${myText2}8";
-                              });
-                            },
-                            child: const FittedBox(
-                                child: Text(
-                              '8',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 30),
-                            )),
-                          ),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                              splashColor: Colors.white.withOpacity(0.5),
-                              backgroundColor: Colors.white.withOpacity(0.12),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              onPressed: () {
-                                setState(() {
-                                  if (isTrue == false) {
-                                    isTrue = true;
-                                    myText2 = '';
-                                    myText = '';
-                                  }
-                                  answer = '';
-                                  myText = "${myText}9";
-                                  myText2 = "${myText2}9";
-                                });
-                              },
-                              child: const FittedBox(
-                                  child: Text(
-                                '9',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    fontSize: 30),
-                              ))),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                              splashColor: Colors.white.withOpacity(0.5),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              backgroundColor: Colors.orange,
-                              onPressed: () {
-                                setState(() {
-                                  if (isTrue == false) {
-                                    isTrue = true;
-                                  }
-                                  if (myText.isNotEmpty) {
-                                    myText2 += '×';
-                                    myText += '*';
-                                  }
-                                });
-                              },
-                              child: const FittedBox(
-                                child: Icon(
-                                  Icons.close,
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  size: 40,
-                                ),
-                              )),
-                        ),
-                      ],
-                    )),
-                // // --------------------------------------------------------------------------
-                SizedBox(
-                    height: mqSize.height * 0.1,
-                    width: mqSize.width * 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                            splashColor: Colors.white.withOpacity(0.5),
-                            backgroundColor: Colors.white.withOpacity(0.12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            onPressed: () {
-                              setState(() {
-                                if (isTrue == false) {
-                                  isTrue = true;
-                                  myText2 = '';
-                                  myText = '';
-                                }
-                                answer = '';
-                                myText = "${myText}4";
-                                myText2 = "${myText2}4";
-                              });
-                            },
-                            child: const FittedBox(
-                                child: Text(
-                              '4',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 30),
-                            )),
-                          ),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                            splashColor: Colors.white.withOpacity(0.5),
-                            backgroundColor: Colors.white.withOpacity(0.12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            onPressed: () {
-                              setState(() {
-                                if (isTrue == false) {
-                                  isTrue = true;
-                                  myText2 = '';
-                                  myText = '';
-                                }
-                                answer = '';
-                                myText = "${myText}5";
-                                myText2 = "${myText2}5";
-                              });
-                            },
-                            child: const FittedBox(
-                                child: Text(
-                              '5',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 30),
-                            )),
-                          ),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                              splashColor: Colors.white.withOpacity(0.5),
-                              backgroundColor: Colors.white.withOpacity(0.12),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              onPressed: () {
-                                setState(() {
-                                  if (isTrue == false) {
-                                    isTrue = true;
-                                    myText2 = '';
-                                    myText = '';
-                                  }
-                                  answer = '';
-                                  myText = "${myText}6";
-                                  myText2 = "${myText2}6";
-                                });
-                              },
-                              child: const FittedBox(
-                                  child: Text(
-                                '6',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    fontSize: 30),
-                              ))),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              splashColor: Colors.white.withOpacity(0.5),
-                              backgroundColor: Colors.orange,
-                              onPressed: () {
-                                setState(() {
-                                  if (isTrue == false) {
-                                    isTrue = true;
-                                  }
-
-                                  myText += '-';
-                                  myText2 += '−';
-                                });
-                              },
-                              child: const FittedBox(
-                                child: Icon(Icons.remove,
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    size: 40),
-                              )),
-                        ),
-                      ],
-                    )),
-                // ---------------------------------------------------------------------------------
-                SizedBox(
-                    height: mqSize.height * 0.1,
-                    width: mqSize.width * 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                            splashColor: Colors.white.withOpacity(0.5),
-                            backgroundColor: Colors.white.withOpacity(0.12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            onPressed: () {
-                              setState(() {
-                                if (isTrue == false) {
-                                  isTrue = true;
-                                  myText2 = '';
-                                  myText = '';
-                                }
-                                answer = '';
-                                myText = "${myText}1";
-                                myText2 = "${myText2}1";
-                              });
-                            },
-                            child: const FittedBox(
-                                child: Text(
-                              '1',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 30),
-                            )),
-                          ),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                            splashColor: Colors.white.withOpacity(0.5),
-                            backgroundColor: Colors.white.withOpacity(0.12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            onPressed: () {
-                              setState(() {
-                                if (isTrue == false) {
-                                  isTrue = true;
-                                  myText2 = '';
-                                  myText = '';
-                                }
-                                answer = '';
-                                myText = "${myText}2";
-                                myText2 = "${myText2}2";
-                              });
-                            },
-                            child: const FittedBox(
-                                child: Text(
-                              '2',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 30),
-                            )),
-                          ),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                              splashColor: Colors.white.withOpacity(0.5),
-                              backgroundColor: Colors.white.withOpacity(0.12),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              onPressed: () {
-                                setState(() {
-                                  if (isTrue == false) {
-                                    isTrue = true;
-                                    myText2 = '';
-                                    myText = '';
-                                  }
-                                  answer = '';
-                                  myText = "${myText}3";
-                                  myText2 = "${myText2}3";
-                                });
-                              },
-                              child: const FittedBox(
-                                  child: Text(
-                                '3',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    fontSize: 30),
-                              ))),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              splashColor: Colors.white.withOpacity(0.5),
-                              backgroundColor: Colors.orange,
-                              onPressed: () {
-                                setState(() {
-                                  if (isTrue == false) {
-                                    isTrue = true;
-                                  }
-                                  if (myText.isNotEmpty) {
-                                    myText += '+';
-                                    myText2 += '+';
-                                  }
-                                });
-                              },
-                              child: const FittedBox(
-                                child: Icon(Icons.add,
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    size: 40),
-                              )),
-                        ),
-                      ],
-                    )),
-
-                // ----------------------------------------------------------------------------------
-                SizedBox(
-                    height: mqSize.height * 0.1,
-                    width: mqSize.width * 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            splashColor: Colors.white.withOpacity(0.5),
-                            backgroundColor: Colors.white.withOpacity(0.12),
-                            onPressed: () {
-                              myDialogBox(context: context);
-                            },
-                            child: const FittedBox(
-                              child: Icon(Icons.settings,
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  size: 40),
+                              ),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                            splashColor: Colors.white.withOpacity(0.5),
-                            backgroundColor: Colors.white.withOpacity(0.12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50)),
-                            onPressed: () {
-                              setState(() {
-                                if (isTrue == false) {
-                                  isTrue = true;
-                                  myText2 = '';
-                                  myText = '';
-                                }
-                                answer = '';
-                                myText = "${myText}0";
-                                myText2 = "${myText2}0";
-                              });
-                            },
-                            child: const FittedBox(
-                              child: Icon(Icons.exposure_zero,
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  size: 40),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                              splashColor: Colors.white.withOpacity(0.5),
-                              backgroundColor: Colors.white.withOpacity(0.12),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              onPressed: () {
-                                if (isTrue == false) {
-                                  isTrue = true;
-                                }
-                                setState(() {
-                                  if (isTrue == false) {
-                                    isTrue = true;
-                                  }
-                                  if (myText.isNotEmpty) {
-                                    myText += '.';
-                                    myText2 += '.';
-                                  }
-                                });
-                              },
-                              child: const FittedBox(
-                                child: Icon(Icons.fiber_manual_record,
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    size: 10),
-                              )),
-                        ),
-                        SizedBox(
-                          height: mqSize.height * 0.24,
-                          width: mqSize.width * 0.22,
-                          child: FloatingActionButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50)),
-                              splashColor: Colors.white.withOpacity(0.5),
-                              backgroundColor: Colors.orange,
-                              onPressed: () {
-                                if (answer.isEmpty && myText.contains('*') ||
-                                    myText.contains('+') ||
-                                    myText.contains('-') ||
-                                    myText.contains('/')) {
-                                  try {
-                                    Parser p = Parser();
-                                    answer = myText2;
-                                    Expression exp = p.parse(myText);
-                                    ContextModel cm = ContextModel();
-                                    num result =
-                                        exp.evaluate(EvaluationType.REAL, cm);
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                    splashColor: Colors.white.withOpacity(0.5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    backgroundColor:
+                                        Colors.white.withOpacity(0.4),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isTrue == false) {
+                                          isTrue = true;
+                                        }
 
+                                        if (myText.isNotEmpty) {
+                                          myText += ')';
+                                          myText2 += ')';
+                                        }
+                                      });
+                                    },
+                                    child: Flexible(
+                                      child: const FittedBox(
+                                          child: Text(
+                                        ')',
+                                        style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                    )),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    splashColor: Colors.white.withOpacity(0.5),
+                                    backgroundColor: Colors.orange,
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isTrue == false) {
+                                          isTrue = true;
+                                        }
+                                        if (myText.isNotEmpty) {
+                                          myText += '/';
+                                          myText2 += '÷';
+                                        }
+                                      });
+                                    },
+                                    child: Flexible(
+                                      child: const FittedBox(
+                                          child: Text(
+                                        '÷',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 40,
+                                        ),
+                                      )),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+
+                  // --------------------------------------------------------------------------
+                  // --------------------------------------------------------------------------
+                  // --------------------------------------------------------------------------
+
+                  // --------------------------------------------------------------------------
+                  Flexible(
+                    child: SizedBox(
+                        height: mqSize.height * 0.1,
+                        width: mqSize.width * 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                  splashColor: Colors.white.withOpacity(0.5),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.12),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50)),
+                                  onPressed: () {
                                     setState(() {
-                                      isTrue = false;
-
-                                      if (myText.contains('.') ||
-                                          myText.contains('/')) {
-                                        myText2 = result.toStringAsFixed(4);
-                                      } else {
-                                        myText2 = result.toInt().toString();
+                                      if (isTrue == false) {
+                                        isTrue = true;
+                                        myText = '';
+                                        myText2 = '';
                                       }
+                                      answer = '';
+                                      myText2 = "${myText2}7";
+                                      myText = "${myText}7";
                                     });
-                                  } catch (e) {
+                                  },
+                                  child: Flexible(
+                                    child: const FittedBox(
+                                        child: Text(
+                                      '7',
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 30),
+                                    )),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                  splashColor: Colors.white.withOpacity(0.5),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.12),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50)),
+                                  onPressed: () {
                                     setState(() {
-                                      print(e);
+                                      if (isTrue == false) {
+                                        isTrue = true;
+                                        myText = '';
+                                        myText2 = '';
+                                      }
+                                      answer = '';
+                                      myText = "${myText}8";
+                                      myText2 = "${myText2}8";
                                     });
-                                  }
-                                }
-                              },
-                              child: const FittedBox(
-                                child: Icon(Icons.drag_handle,
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    size: 40),
-                              )),
-                        ),
-                      ],
-                    )),
-              ],
+                                  },
+                                  child: Flexible(
+                                    child: const FittedBox(
+                                        child: Text(
+                                      '8',
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 30),
+                                    )),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                    splashColor: Colors.white.withOpacity(0.5),
+                                    backgroundColor:
+                                        Colors.white.withOpacity(0.12),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isTrue == false) {
+                                          isTrue = true;
+                                          myText2 = '';
+                                          myText = '';
+                                        }
+                                        answer = '';
+                                        myText = "${myText}9";
+                                        myText2 = "${myText2}9";
+                                      });
+                                    },
+                                    child: Flexible(
+                                      child: const FittedBox(
+                                          child: Text(
+                                        '9',
+                                        style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 30),
+                                      )),
+                                    )),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                    splashColor: Colors.white.withOpacity(0.5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    backgroundColor: Colors.orange,
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isTrue == false) {
+                                          isTrue = true;
+                                        }
+                                        if (myText.isNotEmpty) {
+                                          myText2 += '×';
+                                          myText += '*';
+                                        }
+                                      });
+                                    },
+                                    child: Flexible(
+                                      child: const FittedBox(
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          size: 40,
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+                  // // --------------------------------------------------------------------------
+                  Flexible(
+                    child: SizedBox(
+                        height: mqSize.height * 0.1,
+                        width: mqSize.width * 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                  splashColor: Colors.white.withOpacity(0.5),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.12),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50)),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (isTrue == false) {
+                                        isTrue = true;
+                                        myText2 = '';
+                                        myText = '';
+                                      }
+                                      answer = '';
+                                      myText = "${myText}4";
+                                      myText2 = "${myText2}4";
+                                    });
+                                  },
+                                  child: Flexible(
+                                    child: const FittedBox(
+                                        child: Text(
+                                      '4',
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 30),
+                                    )),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                  splashColor: Colors.white.withOpacity(0.5),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.12),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50)),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (isTrue == false) {
+                                        isTrue = true;
+                                        myText2 = '';
+                                        myText = '';
+                                      }
+                                      answer = '';
+                                      myText = "${myText}5";
+                                      myText2 = "${myText2}5";
+                                    });
+                                  },
+                                  child: Flexible(
+                                    child: const FittedBox(
+                                        child: Text(
+                                      '5',
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 30),
+                                    )),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                    splashColor: Colors.white.withOpacity(0.5),
+                                    backgroundColor:
+                                        Colors.white.withOpacity(0.12),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isTrue == false) {
+                                          isTrue = true;
+                                          myText2 = '';
+                                          myText = '';
+                                        }
+                                        answer = '';
+                                        myText = "${myText}6";
+                                        myText2 = "${myText2}6";
+                                      });
+                                    },
+                                    child: Flexible(
+                                      child: const FittedBox(
+                                          child: Text(
+                                        '6',
+                                        style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 30),
+                                      )),
+                                    )),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    splashColor: Colors.white.withOpacity(0.5),
+                                    backgroundColor: Colors.orange,
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isTrue == false) {
+                                          isTrue = true;
+                                        }
+
+                                        myText += '-';
+                                        myText2 += '−';
+                                      });
+                                    },
+                                    child: Flexible(
+                                      child: const FittedBox(
+                                        child: Icon(Icons.remove,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            size: 40),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+                  // ---------------------------------------------------------------------------------
+                  Flexible(
+                    child: SizedBox(
+                        height: mqSize.height * 0.1,
+                        width: mqSize.width * 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                  splashColor: Colors.white.withOpacity(0.5),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.12),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50)),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (isTrue == false) {
+                                        isTrue = true;
+                                        myText2 = '';
+                                        myText = '';
+                                      }
+                                      answer = '';
+                                      myText = "${myText}1";
+                                      myText2 = "${myText2}1";
+                                    });
+                                  },
+                                  child: Flexible(
+                                    child: const FittedBox(
+                                        child: Text(
+                                      '1',
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 30),
+                                    )),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                  splashColor: Colors.white.withOpacity(0.5),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.12),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50)),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (isTrue == false) {
+                                        isTrue = true;
+                                        myText2 = '';
+                                        myText = '';
+                                      }
+                                      answer = '';
+                                      myText = "${myText}2";
+                                      myText2 = "${myText2}2";
+                                    });
+                                  },
+                                  child: Flexible(
+                                    child: const FittedBox(
+                                        child: Text(
+                                      '2',
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 30),
+                                    )),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                    splashColor: Colors.white.withOpacity(0.5),
+                                    backgroundColor:
+                                        Colors.white.withOpacity(0.12),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isTrue == false) {
+                                          isTrue = true;
+                                          myText2 = '';
+                                          myText = '';
+                                        }
+                                        answer = '';
+                                        myText = "${myText}3";
+                                        myText2 = "${myText2}3";
+                                      });
+                                    },
+                                    child: Flexible(
+                                      child: const FittedBox(
+                                          child: Text(
+                                        '3',
+                                        style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontSize: 30),
+                                      )),
+                                    )),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    splashColor: Colors.white.withOpacity(0.5),
+                                    backgroundColor: Colors.orange,
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isTrue == false) {
+                                          isTrue = true;
+                                        }
+                                        if (myText.isNotEmpty) {
+                                          myText += '+';
+                                          myText2 += '+';
+                                        }
+                                      });
+                                    },
+                                    child: Flexible(
+                                      child: const FittedBox(
+                                        child: Icon(Icons.add,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            size: 40),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+
+                  // ----------------------------------------------------------------------------------
+                  Flexible(
+                    child: SizedBox(
+                        height: mqSize.height * 0.1,
+                        width: mqSize.width * 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: mqSize.height * 0.24,
+                              width: mqSize.width * 0.22,
+                              child: FloatingActionButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50)),
+                                splashColor: Colors.white.withOpacity(0.5),
+                                backgroundColor: Colors.white.withOpacity(0.12),
+                                onPressed: () {
+                                  myList.isEmpty
+                                      ? noHistoryDialogBox(context: context)
+                                      : myDialogBox(context: context);
+                                },
+                                child: Flexible(
+                                  child: const FittedBox(
+                                    child: Text(
+                                      'History',
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 17),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: mqSize.height * 0.24,
+                              width: mqSize.width * 0.22,
+                              child: FloatingActionButton(
+                                splashColor: Colors.white.withOpacity(0.5),
+                                backgroundColor: Colors.white.withOpacity(0.12),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50)),
+                                onPressed: () {
+                                  setState(() {
+                                    if (isTrue == false) {
+                                      isTrue = true;
+                                      myText2 = '';
+                                      myText = '';
+                                    }
+                                    answer = '';
+                                    myText = "${myText}0";
+                                    myText2 = "${myText2}0";
+                                  });
+                                },
+                                child: Flexible(
+                                  child: const FittedBox(
+                                    child: Icon(Icons.exposure_zero,
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        size: 40),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                    splashColor: Colors.white.withOpacity(0.5),
+                                    backgroundColor:
+                                        Colors.white.withOpacity(0.12),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    onPressed: () {
+                                      if (isTrue == false) {
+                                        isTrue = true;
+                                      }
+                                      setState(() {
+                                        if (isTrue == false) {
+                                          isTrue = true;
+                                        }
+                                        if (myText.isNotEmpty) {
+                                          myText += '.';
+                                          myText2 += '.';
+                                        }
+                                      });
+                                    },
+                                    child: Flexible(
+                                      child: const FittedBox(
+                                        child: Icon(Icons.fiber_manual_record,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            size: 10),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                            Flexible(
+                              child: SizedBox(
+                                height: mqSize.height * 0.24,
+                                width: mqSize.width * 0.22,
+                                child: FloatingActionButton(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    splashColor: Colors.white.withOpacity(0.5),
+                                    backgroundColor: Colors.orange,
+                                    onPressed: () {
+                                      if (answer.isEmpty &&
+                                              myText.contains('*') ||
+                                          myText.contains('+') ||
+                                          myText.contains('-') ||
+                                          myText.contains('/')) {
+                                        try {
+                                          Parser p = Parser();
+                                          answer = myText2;
+                                          Expression exp = p.parse(myText);
+                                          ContextModel cm = ContextModel();
+                                          num result = exp.evaluate(
+                                              EvaluationType.REAL, cm);
+
+                                          setState(() {
+                                            isTrue = false;
+
+                                            if (myText.contains('.') ||
+                                                myText.contains('/')) {
+                                              myText2 =
+                                                  result.toStringAsFixed(4);
+                                            } else {
+                                              myText2 =
+                                                  result.toInt().toString();
+                                            }
+                                            myList.add('$answer = ${myText2}');
+
+                                            print(myList);
+                                          });
+                                        } catch (e) {
+                                          setState(() {
+                                            print(e);
+                                          });
+                                        }
+                                      }
+                                    },
+                                    child: Flexible(
+                                      child: const FittedBox(
+                                        child: Icon(Icons.drag_handle,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            size: 40),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+                ],
+              ),
             ),
           )
         ],
