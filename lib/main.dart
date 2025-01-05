@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
            Center(child: OrientationBuilder(
             builder: (context, orientation) {
               return orientation == Orientation.portrait
-                  ? const PortraitCalculator()
+                  ?PortraitCalculator()
                   : const LandscapeCalculator();
             },
           ))

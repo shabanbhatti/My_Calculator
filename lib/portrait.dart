@@ -15,12 +15,13 @@ class PortraitCalculator extends StatefulWidget {
 class _PortraitCalculatorState extends State<PortraitCalculator> {
   var scrollController = ScrollController();
   int myTextLenght = 20;
-  String myText = '';
-  String myText2 = '';
+  String originalText = '';
+  String fakeText = '';
 
   String zeroNumber = '0';
 
-  String answer = '';
+  String fakeAnswer = '';
+  String originalAnswer = '';
 
   var isTrue = true;
 
@@ -92,7 +93,6 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
 
     var mqSize = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       ),
@@ -102,24 +102,38 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(height: mqSize.height * 0.17),
+        
             SizedBox(
               height: mqSize.height * 0.05,
               width: mqSize.width * 0.9,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Flexible(
-                      child: (isTrue == false)
-                          ? FittedBox(
-                              child: Text(
-                                answer,
-                                style: const TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    fontSize: 30,
-                                    color: Color.fromARGB(255, 152, 152, 152)),
-                              ),
-                            )
-                          : const Text(''))
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (isTrue == false) {
+                          originalText = originalAnswer;
+                          fakeText = fakeAnswer;
+                          originalAnswer = '';
+                          fakeAnswer = '';
+                          isTrue = true;
+                        }
+                      });
+                    },
+                    child: Flexible(
+                        child: (isTrue == false)
+                            ? FittedBox(
+                                child: Text(
+                                  fakeAnswer,
+                                  style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 30,
+                                      color: Color.fromARGB(255, 152, 152, 152)),
+                                ),
+                              )
+                            : const Text('')),
+                  )
                 ],
               ),
             ),
@@ -134,9 +148,9 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                     Flexible(
                       child: FittedBox(
                         child: Text(
-                          myText == ''
+                          originalText == ''
                               ? zeroNumber
-                              : myText2.characters.take(25).toString(),
+                              : fakeText.characters.take(25).toString(),
                           style: TextStyle(
                             fontSize: 65,
                             color: Colors.white,
@@ -149,7 +163,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                 ),
               ),
             ),
-
+        
             // --------------------------------------------------------------------------
             Center(
               child: SizedBox(
@@ -185,8 +199,8 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                         )),
                                     onLongPress: () {
                                       setState(() {
-                                        myText2 = '';
-                                        myText = '';
+                                        fakeText = '';
+                                        originalText = '';
                                         isTrue = true;
                                       });
                                     },
@@ -194,27 +208,33 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                       setState(() {
                                         if (isTrue == false) {
                                           isTrue = true;
-                                          myText2 = '';
-                                          myText = '';
+                                          fakeText = '';
+                                          originalText = '';
                                         }
-
-                                        if (myText.isNotEmpty) {
-                                          myText2 = myText2.substring(
-                                              0, myText2.length - 1);
-                                          myText = myText.substring(
-                                              0, myText.length - 1);
-                                          answer.isEmpty;
+        
+                                        if (isTrue == true &&
+                                                originalText.isNotEmpty) {
+        
+                                          fakeText = fakeText.substring(
+                                              0, fakeText.length - 1);
+                                          originalText = originalText.substring(
+                                              0, originalText.length - 1);
+                                            fakeAnswer='';
+                                            originalAnswer='';
+                                             
+                                          
                                         } else {
-                                          myText2 = '';
-                                          myText = '';
-                                          answer.isEmpty;
+                                          fakeText = '';
+                                          originalText = '';
+                                          fakeAnswer.isEmpty;
+                                          originalAnswer.isEmpty;
                                         }
                                       });
                                     },
                                     child: Flexible(
                                       child: FittedBox(
                                         child: (isTrue == true &&
-                                                myText.isNotEmpty)
+                                                originalText.isNotEmpty)
                                             ? const Icon(Icons.backspace,
                                                 color: Color.fromARGB(
                                                     255, 255, 255, 255),
@@ -225,8 +245,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                                     color: Color.fromARGB(
                                                         255, 255, 255, 255),
                                                     fontSize: 30,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                    fontWeight: FontWeight.bold),
                                               ),
                                       ),
                                     ),
@@ -239,8 +258,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                   width: mqSize.width * 0.22,
                                   child: FloatingActionButton(
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
+                                        borderRadius: BorderRadius.circular(50)),
                                     backgroundColor:
                                         Colors.white.withOpacity(0.4),
                                     splashColor: Colors.white.withOpacity(0.5),
@@ -249,8 +267,8 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                         if (isTrue == false) {
                                           isTrue = true;
                                         }
-                                        myText += '(';
-                                        myText2 += '(';
+                                        originalText += '(';
+                                        fakeText += '(';
                                       });
                                     },
                                     child: Flexible(
@@ -272,8 +290,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                   height: mqSize.height * 0.24,
                                   width: mqSize.width * 0.22,
                                   child: FloatingActionButton(
-                                      splashColor:
-                                          Colors.white.withOpacity(0.5),
+                                      splashColor: Colors.white.withOpacity(0.5),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(50)),
@@ -284,10 +301,10 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                           if (isTrue == false) {
                                             isTrue = true;
                                           }
-
-                                          if (myText.isNotEmpty) {
-                                            myText += ')';
-                                            myText2 += ')';
+        
+                                          if (originalText.isNotEmpty) {
+                                            originalText += ')';
+                                            fakeText += ')';
                                           }
                                         });
                                       },
@@ -312,17 +329,16 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(50)),
-                                      splashColor:
-                                          Colors.white.withOpacity(0.5),
+                                      splashColor: Colors.white.withOpacity(0.5),
                                       backgroundColor: Colors.orange,
                                       onPressed: () {
                                         setState(() {
                                           if (isTrue == false) {
                                             isTrue = true;
                                           }
-                                          if (myText.isNotEmpty) {
-                                            myText += '/';
-                                            myText2 += '÷';
+                                          if (originalText.isNotEmpty) {
+                                            originalText += '/';
+                                            fakeText += '÷';
                                           }
                                         });
                                       },
@@ -342,11 +358,11 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                             ],
                           )),
                     ),
-
+        
                     // --------------------------------------------------------------------------
                     // --------------------------------------------------------------------------
                     // --------------------------------------------------------------------------
-
+        
                     // --------------------------------------------------------------------------
                     Flexible(
                       child: SizedBox(
@@ -364,18 +380,18 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                     backgroundColor:
                                         Colors.white.withOpacity(0.12),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
+                                        borderRadius: BorderRadius.circular(50)),
                                     onPressed: () {
                                       setState(() {
                                         if (isTrue == false) {
                                           isTrue = true;
-                                          myText = '';
-                                          myText2 = '';
+                                          originalText = '';
+                                          fakeText = '';
                                         }
-                                        answer = '';
-                                        myText2 = "${myText2}7";
-                                        myText = "${myText}7";
+                                        fakeAnswer = '';
+                                        originalAnswer = '';
+                                        fakeText = "${fakeText}7";
+                                        originalText = "${originalText}7";
                                       });
                                     },
                                     child: Flexible(
@@ -400,18 +416,18 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                     backgroundColor:
                                         Colors.white.withOpacity(0.12),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
+                                        borderRadius: BorderRadius.circular(50)),
                                     onPressed: () {
                                       setState(() {
                                         if (isTrue == false) {
                                           isTrue = true;
-                                          myText = '';
-                                          myText2 = '';
+                                          originalText = '';
+                                          fakeText = '';
                                         }
-                                        answer = '';
-                                        myText = "${myText}8";
-                                        myText2 = "${myText2}8";
+                                        fakeAnswer = '';
+                                        originalAnswer = '';
+                                        originalText = "${originalText}8";
+                                        fakeText = "${fakeText}8";
                                       });
                                     },
                                     child: Flexible(
@@ -432,8 +448,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                   height: mqSize.height * 0.24,
                                   width: mqSize.width * 0.22,
                                   child: FloatingActionButton(
-                                      splashColor:
-                                          Colors.white.withOpacity(0.5),
+                                      splashColor: Colors.white.withOpacity(0.5),
                                       backgroundColor:
                                           Colors.white.withOpacity(0.12),
                                       shape: RoundedRectangleBorder(
@@ -443,12 +458,12 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                         setState(() {
                                           if (isTrue == false) {
                                             isTrue = true;
-                                            myText2 = '';
-                                            myText = '';
+                                            fakeText = '';
+                                            originalText = '';
                                           }
-                                          answer = '';
-                                          myText = "${myText}9";
-                                          myText2 = "${myText2}9";
+                                          fakeAnswer = '';
+                                          originalText = "${originalText}9";
+                                          fakeText = "${fakeText}9";
                                         });
                                       },
                                       child: Flexible(
@@ -468,8 +483,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                   height: mqSize.height * 0.24,
                                   width: mqSize.width * 0.22,
                                   child: FloatingActionButton(
-                                      splashColor:
-                                          Colors.white.withOpacity(0.5),
+                                      splashColor: Colors.white.withOpacity(0.5),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(50)),
@@ -479,9 +493,9 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                           if (isTrue == false) {
                                             isTrue = true;
                                           }
-                                          if (myText.isNotEmpty) {
-                                            myText2 += '×';
-                                            myText += '*';
+                                          if (originalText.isNotEmpty) {
+                                            fakeText += '×';
+                                            originalText += '*';
                                           }
                                         });
                                       },
@@ -517,18 +531,17 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                     backgroundColor:
                                         Colors.white.withOpacity(0.12),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
+                                        borderRadius: BorderRadius.circular(50)),
                                     onPressed: () {
                                       setState(() {
                                         if (isTrue == false) {
                                           isTrue = true;
-                                          myText2 = '';
-                                          myText = '';
+                                          fakeText = '';
+                                          originalText = '';
                                         }
-                                        answer = '';
-                                        myText = "${myText}4";
-                                        myText2 = "${myText2}4";
+                                        fakeAnswer = '';
+                                        originalText = "${originalText}4";
+                                        fakeText = "${fakeText}4";
                                       });
                                     },
                                     child: Flexible(
@@ -553,18 +566,17 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                     backgroundColor:
                                         Colors.white.withOpacity(0.12),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
+                                        borderRadius: BorderRadius.circular(50)),
                                     onPressed: () {
                                       setState(() {
                                         if (isTrue == false) {
                                           isTrue = true;
-                                          myText2 = '';
-                                          myText = '';
+                                          fakeText = '';
+                                          originalText = '';
                                         }
-                                        answer = '';
-                                        myText = "${myText}5";
-                                        myText2 = "${myText2}5";
+                                        fakeAnswer = '';
+                                        originalText = "${originalText}5";
+                                        fakeText = "${fakeText}5";
                                       });
                                     },
                                     child: Flexible(
@@ -585,8 +597,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                   height: mqSize.height * 0.24,
                                   width: mqSize.width * 0.22,
                                   child: FloatingActionButton(
-                                      splashColor:
-                                          Colors.white.withOpacity(0.5),
+                                      splashColor: Colors.white.withOpacity(0.5),
                                       backgroundColor:
                                           Colors.white.withOpacity(0.12),
                                       shape: RoundedRectangleBorder(
@@ -596,12 +607,12 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                         setState(() {
                                           if (isTrue == false) {
                                             isTrue = true;
-                                            myText2 = '';
-                                            myText = '';
+                                            fakeText = '';
+                                            originalText = '';
                                           }
-                                          answer = '';
-                                          myText = "${myText}6";
-                                          myText2 = "${myText2}6";
+                                          fakeAnswer = '';
+                                          originalText = "${originalText}6";
+                                          fakeText = "${fakeText}6";
                                         });
                                       },
                                       child: Flexible(
@@ -624,17 +635,16 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(50)),
-                                      splashColor:
-                                          Colors.white.withOpacity(0.5),
+                                      splashColor: Colors.white.withOpacity(0.5),
                                       backgroundColor: Colors.orange,
                                       onPressed: () {
                                         setState(() {
                                           if (isTrue == false) {
                                             isTrue = true;
                                           }
-
-                                          myText += '-';
-                                          myText2 += '−';
+        
+                                          originalText += '-';
+                                          fakeText += '−';
                                         });
                                       },
                                       child: Flexible(
@@ -667,18 +677,17 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                     backgroundColor:
                                         Colors.white.withOpacity(0.12),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
+                                        borderRadius: BorderRadius.circular(50)),
                                     onPressed: () {
                                       setState(() {
                                         if (isTrue == false) {
                                           isTrue = true;
-                                          myText2 = '';
-                                          myText = '';
+                                          fakeText = '';
+                                          originalText = '';
                                         }
-                                        answer = '';
-                                        myText = "${myText}1";
-                                        myText2 = "${myText2}1";
+                                        fakeAnswer = '';
+                                        originalText = "${originalText}1";
+                                        fakeText = "${fakeText}1";
                                       });
                                     },
                                     child: Flexible(
@@ -703,18 +712,17 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                     backgroundColor:
                                         Colors.white.withOpacity(0.12),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
+                                        borderRadius: BorderRadius.circular(50)),
                                     onPressed: () {
                                       setState(() {
                                         if (isTrue == false) {
                                           isTrue = true;
-                                          myText2 = '';
-                                          myText = '';
+                                          fakeText = '';
+                                          originalText = '';
                                         }
-                                        answer = '';
-                                        myText = "${myText}2";
-                                        myText2 = "${myText2}2";
+                                        fakeAnswer = '';
+                                        originalText = "${originalText}2";
+                                        fakeText = "${fakeText}2";
                                       });
                                     },
                                     child: Flexible(
@@ -735,8 +743,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                   height: mqSize.height * 0.24,
                                   width: mqSize.width * 0.22,
                                   child: FloatingActionButton(
-                                      splashColor:
-                                          Colors.white.withOpacity(0.5),
+                                      splashColor: Colors.white.withOpacity(0.5),
                                       backgroundColor:
                                           Colors.white.withOpacity(0.12),
                                       shape: RoundedRectangleBorder(
@@ -746,12 +753,12 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                         setState(() {
                                           if (isTrue == false) {
                                             isTrue = true;
-                                            myText2 = '';
-                                            myText = '';
+                                            fakeText = '';
+                                            originalText = '';
                                           }
-                                          answer = '';
-                                          myText = "${myText}3";
-                                          myText2 = "${myText2}3";
+                                          fakeAnswer = '';
+                                          originalText = "${originalText}3";
+                                          fakeText = "${fakeText}3";
                                         });
                                       },
                                       child: Flexible(
@@ -774,17 +781,16 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(50)),
-                                      splashColor:
-                                          Colors.white.withOpacity(0.5),
+                                      splashColor: Colors.white.withOpacity(0.5),
                                       backgroundColor: Colors.orange,
                                       onPressed: () {
                                         setState(() {
                                           if (isTrue == false) {
                                             isTrue = true;
                                           }
-                                          if (myText.isNotEmpty) {
-                                            myText += '+';
-                                            myText2 += '+';
+                                          if (originalText.isNotEmpty) {
+                                            originalText += '+';
+                                            fakeText += '+';
                                           }
                                         });
                                       },
@@ -801,7 +807,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                             ],
                           )),
                     ),
-
+        
                     // ----------------------------------------------------------------------------------
                     Flexible(
                       child: SizedBox(
@@ -817,8 +823,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50)),
                                   splashColor: Colors.white.withOpacity(0.5),
-                                  backgroundColor:
-                                      Colors.white.withOpacity(0.12),
+                                  backgroundColor: Colors.white.withOpacity(0.12),
                                   onPressed: () {
                                     myList.isEmpty
                                         ? noHistoryDialogBox(context: context)
@@ -842,27 +847,26 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                 width: mqSize.width * 0.22,
                                 child: FloatingActionButton(
                                   splashColor: Colors.white.withOpacity(0.5),
-                                  backgroundColor:
-                                      Colors.white.withOpacity(0.12),
+                                  backgroundColor: Colors.white.withOpacity(0.12),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50)),
                                   onPressed: () {
                                     setState(() {
                                       if (isTrue == false) {
                                         isTrue = true;
-                                        myText2 = '';
-                                        myText = '';
+                                        fakeText = '';
+                                        originalText = '';
                                       }
-                                      answer = '';
-                                      myText = "${myText}0";
-                                      myText2 = "${myText2}0";
+                                      fakeAnswer = '';
+                                      originalText = "${originalText}0";
+                                      fakeText = "${fakeText}0";
                                     });
                                   },
                                   child: Flexible(
                                     child: const FittedBox(
                                       child: Icon(Icons.exposure_zero,
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255),
+                                          color:
+                                              Color.fromARGB(255, 255, 255, 255),
                                           size: 40),
                                     ),
                                   ),
@@ -873,8 +877,7 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                   height: mqSize.height * 0.24,
                                   width: mqSize.width * 0.22,
                                   child: FloatingActionButton(
-                                      splashColor:
-                                          Colors.white.withOpacity(0.5),
+                                      splashColor: Colors.white.withOpacity(0.5),
                                       backgroundColor:
                                           Colors.white.withOpacity(0.12),
                                       shape: RoundedRectangleBorder(
@@ -888,9 +891,9 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                           if (isTrue == false) {
                                             isTrue = true;
                                           }
-                                          if (myText.isNotEmpty) {
-                                            myText += '.';
-                                            myText2 += '.';
+                                          if (originalText.isNotEmpty) {
+                                            originalText += '.';
+                                            fakeText += '.';
                                           }
                                         });
                                       },
@@ -912,37 +915,36 @@ class _PortraitCalculatorState extends State<PortraitCalculator> {
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(50)),
-                                      splashColor:
-                                          Colors.white.withOpacity(0.5),
+                                      splashColor: Colors.white.withOpacity(0.5),
                                       backgroundColor: Colors.orange,
                                       onPressed: () {
-                                        if (answer.isEmpty &&
-                                                myText.contains('*') ||
-                                            myText.contains('+') ||
-                                            myText.contains('-') ||
-                                            myText.contains('/')) {
+                                        if (fakeAnswer == '' &&
+                                                originalText.contains('*') ||
+                                            originalText.contains('+') ||
+                                            originalText.contains('-') ||
+                                            originalText.contains('/')) {
                                           try {
                                             Parser p = Parser();
-                                            answer = myText2;
-                                            Expression exp = p.parse(myText);
+                                            fakeAnswer = fakeText;
+                                            originalAnswer = originalText;
+                                            Expression exp = p.parse(originalText);
                                             ContextModel cm = ContextModel();
                                             num result = exp.evaluate(
                                                 EvaluationType.REAL, cm);
-
+        
                                             setState(() {
                                               isTrue = false;
-
-                                              if (myText.contains('.') ||
-                                                  myText.contains('/')) {
-                                                myText2 =
+        
+                                              if (originalText.contains('.') ||
+                                                  originalText.contains('/')) {
+                                                fakeText =
                                                     result.toStringAsFixed(4);
                                               } else {
-                                                myText2 =
+                                                fakeText =
                                                     result.toInt().toString();
                                               }
-                                              myList
-                                                  .add('$answer = ${myText2}');
-
+                                              myList.add('$fakeAnswer = ${fakeText}');
+        
                                               print(myList);
                                             });
                                           } catch (e) {
